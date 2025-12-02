@@ -1,6 +1,8 @@
-
 config BR2_PACKAGE_AESD_ASSIGNMENTS
-	bool "aesd-assignments"
-	help
-	  Includes the writer executable, finder.sh and tester.sh in the kernel image.
-	  Used to understand buildroot external trees and package builds.
+    bool "aesd-assignments"
+    help
+      This package pulls the assignments-3-and-later repo,
+      builds the writer application using the Buildroot toolchain,
+      installs the writer, finder.sh, finder-test.sh,
+      and configuration files into the target root filesystem.
+
