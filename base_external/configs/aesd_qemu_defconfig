@@ -1,5 +1,3 @@
-BR2_DEFCONFIG="$(BR2_EXTERNAL)/configs/aesd_qemu_defconfig"
-
 BR2_aarch64=y
 
 BR2_TOOLCHAIN_BUILDROOT=y
