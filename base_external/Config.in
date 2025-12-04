@@ -1,5 +1,4 @@
 menu "External packages"
-# When BR2_EXTERNAL is set to this directory Buildroot will source the package
-# Config.in files using paths relative to the external root.
-source "package/aesd-assignments/Config.in"
+# Using absolute path as a reliable workaround so Kconfig can always find the package file
+source "/home/siddjove/assignment-4-siddjove/base_external/package/aesd-assignments/Config.in"
 endmenu
