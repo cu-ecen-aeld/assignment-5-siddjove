@@ -1,4 +1,5 @@
 menu "External packages"
-# path is relative to the buildroot/ directory when buildroot runs make
-source "../base_external/package/aesd-assignments/Config.in"
+# When BR2_EXTERNAL is set to this directory Buildroot will source the package
+# Config.in files using paths relative to the external root.
+source "package/aesd-assignments/Config.in"
 endmenu
