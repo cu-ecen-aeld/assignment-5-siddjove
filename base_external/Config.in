@@ -1,3 +1,9 @@
-menu "Project base externals"
-    source "/home/siddjove/assignment4/base_external/package/aesd-assignments/Config.in"
+#
+# External packages and project configuration for AESD assignments
+#
+
+menu "Base external package selection"
+
+source "base_external/package/aesd-assignments/Config.in"
+
 endmenu
