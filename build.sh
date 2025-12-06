@@ -69,4 +69,3 @@ echo "=== BUILD SUMMARY ===" | tee -a "$LOG"
 ls -lh "$BUILDROOT_OUT" | tee -a "$LOG"
 echo "Artifacts copied to $AUTOGRADER_DIR" | tee -a "$LOG"
 echo "Build completed successfully." | tee -a "$LOG"
-
