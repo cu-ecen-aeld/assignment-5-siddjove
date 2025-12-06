@@ -1,4 +1,3 @@
 menu "Project base externals"
-	source "package/aesd-assignments/Config.in"
+    source "/home/siddjove/assignment4/base_external/package/aesd-assignments/Config.in"
 endmenu
-
