@@ -1,71 +1,37 @@
-#!/usr/bin/env bash
-# CI-friendly build wrapper for Buildroot
-set -euo pipefail
+#!/bin/bash
+# Script to build buildroot configuration
+# Author: Siddhant Jajoo
 
-# Where your external overlay lives relative to repo root
-export BR2_EXTERNAL="$(pwd)/base_external"
-echo "build.sh: using BR2_EXTERNAL=$BR2_EXTERNAL"
+source shared.sh
 
-# Build log
-LOG="$(pwd)/build.sh.out"
-: > "$LOG"
+EXTERNAL_REL_BUILDROOT=../base_external
 
-# number of build threads
-NPROCS=$(nproc || echo 1)
+git submodule init
+git submodule sync
+git submodule update
 
-cd buildroot
+set -e
+cd `dirname $0`
 
-# 1) Make sure we have a .config. Use olddefconfig so any NEW Kconfig options are
-# accepted with their defaults (non-interactive). This prevents the menu prompt you saw.
-if [ ! -f .config ]; then
-  echo "No buildroot .config found — attempting to generate from defconfig..." | tee -a "$LOG"
-  # If your repo contains a defconfig (e.g. configs/your_defconfig), replace 'defconfig' below.
-  # Otherwise olddefconfig will try to use defaults.
-  make BR2_EXTERNAL="$BR2_EXTERNAL" olddefconfig &>> "$LOG" || true
+if [ ! -e buildroot/.config ]
+then
+    echo "MISSING BUILDROOT CONFIGURATION FILE"
+
+    if [ -e ${AESD_MODIFIED_DEFCONFIG} ]
+    then
+        echo "USING ${AESD_MODIFIED_DEFCONFIG}"
+        make -C buildroot defconfig \
+            BR2_EXTERNAL=${EXTERNAL_REL_BUILDROOT} \
+            BR2_DEFCONFIG=${AESD_MODIFIED_DEFCONFIG_REL_BUILDROOT}
+    else
+        echo "Run ./save_config.sh to save this as the default configuration in ${AESD_MODIFIED_DEFCONFIG}"
+        echo "Then add packages as needed to complete the installation, re-running ./save-config.sh as needed"
+        make -C buildroot defconfig \
+            BR2_EXTERNAL=${EXTERNAL_REL_BUILDROOT} \
+            BR2_DEFCONFIG=${AESD_DEFAULT_DEFCONFIG}
+    fi
 else
-  echo "Existing .config found — running olddefconfig to accept new defaults (non-interactive)" | tee -a "$LOG"
-  make BR2_EXTERNAL="$BR2_EXTERNAL" olddefconfig &>> "$LOG" || true
+    echo "USING EXISTING BUILDROOT CONFIG"
+    echo "To force update, delete .config or make changes using make menuconfig and build again."
+    make -C buildroot BR2_EXTERNAL=${EXTERNAL_REL_BUILDROOT}
 fi
-
-# 2) Build (non-interactive). Capture output to build.sh.out for CI debugging
-echo "Starting build: make -j$NPROCS" | tee -a "$LOG"
-time make BR2_EXTERNAL="$BR2_EXTERNAL" -j"$NPROCS" O=output &>> "$LOG" || {
-  echo "Build failed — tail of log:" | tee -a "$LOG"
-  tail -n 200 "$LOG" | sed -n '1,200p'
-  exit 1
-}
-
-# 3) Ensure images exist and copy artifacts for autograder
-cd ..
-
-BUILDROOT_OUT="$(pwd)/buildroot/output/images"
-AUTOGRADER_DIR="/tmp/aesd-autograder"
-
-mkdir -p "$AUTOGRADER_DIR"
-echo "Copying artifacts to $AUTOGRADER_DIR" | tee -a "$LOG"
-
-# Copy Image and rootfs files (if present)
-if [ -f "$BUILDROOT_OUT/Image" ]; then
-  cp -v "$BUILDROOT_OUT/Image" "$AUTOGRADER_DIR/" | tee -a "$LOG"
-else
-  echo "WARNING: Image not found at $BUILDROOT_OUT/Image" | tee -a "$LOG"
-fi
-
-# Prefer ext4 if available, else ext2 else tar
-if [ -f "$BUILDROOT_OUT/rootfs.ext4" ]; then
-  cp -v "$BUILDROOT_OUT/rootfs.ext4" "$AUTOGRADER_DIR/" | tee -a "$LOG"
-elif [ -f "$BUILDROOT_OUT/rootfs.ext2" ]; then
-  cp -v "$BUILDROOT_OUT/rootfs.ext2" "$AUTOGRADER_DIR/" | tee -a "$LOG"
-elif [ -f "$BUILDROOT_OUT/rootfs.tar" ]; then
-  cp -v "$BUILDROOT_OUT/rootfs.tar" "$AUTOGRADER_DIR/" | tee -a "$LOG"
-else
-  echo "ERROR: no rootfs image found in $BUILDROOT_OUT" | tee -a "$LOG"
-  tail -n 200 "$LOG"
-  exit 1
-fi
-
-# Make a small summary that CI log can use to detect success
-echo "=== BUILD SUMMARY ===" | tee -a "$LOG"
-ls -lh "$BUILDROOT_OUT" | tee -a "$LOG"
-echo "Artifacts copied to $AUTOGRADER_DIR" | tee -a "$LOG"
-echo "Build completed successfully." | tee -a "$LOG"
