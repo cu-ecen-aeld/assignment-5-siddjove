@@ -1,0 +1,16 @@
+No buildroot .config found — attempting to generate from defconfig...
+mkdir -p /home/siddjove/assignment4/buildroot/output/build/buildroot-config/lxdialog
+PKG_CONFIG_PATH="" make CC="/usr/bin/gcc" HOSTCC="/usr/bin/gcc" \
+    obj=/home/siddjove/assignment4/buildroot/output/build/buildroot-config -C support/kconfig -f Makefile.br conf
+/usr/bin/gcc -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 -DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1 -DLOCALE  -I/home/siddjove/assignment4/buildroot/output/build/buildroot-config -DCONFIG_=\"\"  -MM *.c > /home/siddjove/assignment4/buildroot/output/build/buildroot-config/.depend 2>/dev/null || :
+/usr/bin/gcc -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 -DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1 -DLOCALE  -I/home/siddjove/assignment4/buildroot/output/build/buildroot-config -DCONFIG_=\"\"   -c conf.c -o /home/siddjove/assignment4/buildroot/output/build/buildroot-config/conf.o
+/usr/bin/gcc -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 -DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1 -DLOCALE  -I/home/siddjove/assignment4/buildroot/output/build/buildroot-config -DCONFIG_=\"\"  -I. -c /home/siddjove/assignment4/buildroot/output/build/buildroot-config/zconf.tab.c -o /home/siddjove/assignment4/buildroot/output/build/buildroot-config/zconf.tab.o
+/usr/bin/gcc -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 -DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1 -DLOCALE  -I/home/siddjove/assignment4/buildroot/output/build/buildroot-config -DCONFIG_=\"\"   /home/siddjove/assignment4/buildroot/output/build/buildroot-config/conf.o /home/siddjove/assignment4/buildroot/output/build/buildroot-config/zconf.tab.o  -o /home/siddjove/assignment4/buildroot/output/build/buildroot-config/conf
+rm /home/siddjove/assignment4/buildroot/output/build/buildroot-config/zconf.tab.c
+/home/siddjove/assignment4/base_external/Config.in:4: can't open file "/package/Config.in"
+make[1]: *** [Makefile:1006: olddefconfig] Error 1
+make: *** [Makefile:82: _all] Error 2
+Starting build: make -j8
+Makefile:943: *** Please configure Buildroot first (e.g. "make menuconfig").  Stop.
+make: *** [Makefile:82: _all] Error 2
+Build failed — tail of log:

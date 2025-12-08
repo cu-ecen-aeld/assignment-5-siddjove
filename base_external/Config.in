@@ -1,6 +1,5 @@
-menu "Project Base external options"
+menu "Project base external options"
 
-# Your external packages will be sourced here
 source "$BR2_EXTERNAL_PROJECT_BASE_PATH/package/Config.in"
 
 endmenu
