@@ -5,7 +5,7 @@
 ################################################################################
 
 # Use the tagged version you pushed for assignment 5
-AESD_ASSIGNMENTS_VERSION = assignment-5-complete-v2
+AESD_ASSIGNMENTS_VERSION = assignment-5-complete-v3
 
 # Clone your assignments repo via HTTPS (works in CI)
 AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
