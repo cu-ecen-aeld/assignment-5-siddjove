@@ -4,27 +4,31 @@
 #
 ################################################################################
 
-# Use your A3+ repo as the source
-AESD_ASSIGNMENTS_VERSION = 89167357d86f8c4c8229b7e4bd986564285f01a8
-AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
-AESD_ASSIGNMENTS_SITE_METHOD = git
-AESD_ASSIGNMENTS_GIT_SUBMODULES = YES
+# Use the tagged version you pushed for assignment 5
+AESD_ASSIGNMENTS_VERSION = assignment-5-complete
 
-# Build the finder-app using the cross compiler
+# Clone your assignments repo via HTTPS (works in CI)
+AESD_ASSIGNMENTS_SITE = https://github.com/cu-ecen-aeld/assignments-3-and-later-siddjove.git
+AESD_ASSIGNMENTS_SITE_METHOD = git
+
+AESD_ASSIGNMENTS_LICENSE = GPL-2.0+
+AESD_ASSIGNMENTS_INSTALL_TARGET = YES
+
+# Build the aesdsocket application in the server directory for the target
 define AESD_ASSIGNMENTS_BUILD_CMDS
-	$(MAKE) -C $(@D)/finder-app CC="$(TARGET_CC)"
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/server CROSS_COMPILE="$(TARGET_CROSS)"
 endef
 
-# Install scripts and binaries into target rootfs
+# Install aesdsocket binary and init script into target rootfs
 define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
-	# Scripts and binaries into /usr/bin
-	$(INSTALL) -D -m 0755 $(@D)/finder-app/finder.sh $(TARGET_DIR)/usr/bin/finder.sh
-	$(INSTALL) -D -m 0755 $(@D)/finder-app/writer $(TARGET_DIR)/usr/bin/writer
-	$(INSTALL) -D -m 0755 $(@D)/finder-app/finder-test.sh $(TARGET_DIR)/usr/bin/finder-test.sh
+	# Install aesdsocket binary
+	$(INSTALL) -D -m 0755 $(@D)/server/aesdsocket \
+		$(TARGET_DIR)/usr/bin/aesdsocket
 
-	# Config files into /etc/finder-app/conf
-	$(INSTALL) -d $(TARGET_DIR)/etc/finder-app/conf
-	cp -r $(@D)/finder-app/conf/* $(TARGET_DIR)/etc/finder-app/conf/
+	# Install init script so it runs at boot
+	$(INSTALL) -D -m 0755 $(@D)/server/aesdsocket-start-stop \
+		$(TARGET_DIR)/etc/init.d/S99aesdsocket
 endef
 
 $(eval $(generic-package))
+
