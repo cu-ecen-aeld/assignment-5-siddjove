@@ -8,7 +8,7 @@
 AESD_ASSIGNMENTS_VERSION = assignment-5-complete
 
 # Clone your assignments repo via HTTPS (works in CI)
-AESD_ASSIGNMENTS_SITE = https://github.com/cu-ecen-aeld/assignments-3-and-later-siddjove.git
+AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
 
 AESD_ASSIGNMENTS_LICENSE = GPL-2.0+
