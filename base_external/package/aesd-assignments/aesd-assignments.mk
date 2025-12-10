@@ -1,7 +1,14 @@
+################################################################################
+#
+# aesd-assignments
+#
+################################################################################
+
 AESD_ASSIGNMENTS_VERSION = assignment-5-complete-v3
 AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
-...
+AESD_ASSIGNMENTS_LICENSE = GPL-2.0+
+AESD_ASSIGNMENTS_INSTALL_TARGET = YES
 
 define AESD_ASSIGNMENTS_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/server CC="$(TARGET_CC)"
@@ -18,4 +25,3 @@ define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
 endef
 
 $(eval $(generic-package))
-
