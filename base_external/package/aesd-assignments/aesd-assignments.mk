@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-AESD_ASSIGNMENTS_VERSION = master
+AESD_ASSIGNMENTS_VERSION = assignment-5-complete-v5
 
 AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
