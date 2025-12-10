@@ -1,25 +1,12 @@
-################################################################################
-#
-# aesd-assignments
-#
-################################################################################
-
-# Use the tagged version you pushed for assignment 5
 AESD_ASSIGNMENTS_VERSION = assignment-5-complete-v3
-
-# Clone your assignments repo via HTTPS (works in CI)
 AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
+...
 
-AESD_ASSIGNMENTS_LICENSE = GPL-2.0+
-AESD_ASSIGNMENTS_INSTALL_TARGET = YES
-
-# Build the aesdsocket application in the server directory for the target
 define AESD_ASSIGNMENTS_BUILD_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/server CROSS_COMPILE="$(TARGET_CROSS)"
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/server CC="$(TARGET_CC)"
 endef
 
-# Install aesdsocket binary and init script into target rootfs
 define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
 	# Install aesdsocket binary
 	$(INSTALL) -D -m 0755 $(@D)/server/aesdsocket \
