@@ -1,5 +1,8 @@
 name: assignment-test
 
+ uses: webfactory/ssh-agent@v0.8.1
+  with:
+    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 on:
   push:
     tags-ignore:
