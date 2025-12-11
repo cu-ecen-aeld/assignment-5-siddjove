@@ -1,4 +1,7 @@
+# typical ignores
 *.o
+*.out
 build/
+tmp/
 .vscode/
-*.log
+.idea/
