@@ -1,9 +1,13 @@
 [submodule "assignment-autotest"]
 	path = assignment-autotest
 	url = https://github.com/cu-ecen-5013/assignment-autotest
+[submodule "assignment-autotest/Unity"]
+	path = assignment-autotest/Unity
+	url = https://github.com/ThrowTheSwitch/Unity.git
 [submodule "buildroot"]
 	path = buildroot
-	url = https://gitlab.com/buildroot.org/buildroot.git
+	# use GitHub mirror (avoid GitLab auth issues)
+	url = https://github.com/buildroot/buildroot.git
 	branch = 2024.02.x
 [submodule "buildroot-assignments-base"]
 	path = buildroot-assignments-base
