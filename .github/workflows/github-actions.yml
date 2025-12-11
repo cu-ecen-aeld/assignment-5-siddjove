@@ -1,3 +1,4 @@
+
 name: assignment-test
 
 on:
@@ -16,35 +17,17 @@ jobs:
     steps:
       - name: Checkout main repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
-      - name: Start ssh-agent and add private key
-        uses: webfactory/ssh-agent@v0.8.1
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Fix github host key
+      - name: Fix github.com host key
         run: |
           mkdir -p /root/.ssh
           ssh-keygen -f "/root/.ssh/known_hosts" -R "github.com" || true
           ssh-keyscan github.com >> /root/.ssh/known_hosts
-          chmod 600 /root/.ssh/known_hosts
-
-      - name: Debug verify SSH key and connectivity
-        env:
-          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
-        run: |
-          echo "=== ls -la /root/.ssh ==="
-          ls -la /root/.ssh || true
-          echo
-          echo "=== ssh-agent identities ==="
-          ssh-add -l || echo "No identities loaded into ssh-agent"
-          echo
-          echo "=== git ls-remote to test repo access ==="
-          git ls-remote git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git HEAD || true
-          echo "=== debug complete ==="
-
       - name: Checkout submodules
         run: git submodule update --init --recursive
 
@@ -56,5 +39,4 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          ssh-add -D || true
-          ssh-keygen -f "/root/.ssh/known_hosts" -R "github.com" || true
+          ssh-add -D
