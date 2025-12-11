@@ -7,7 +7,7 @@
 AESD_ASSIGNMENTS_VERSION = assignment-5-complete-v9
 
 # Use HTTPS so CI doesn't require an SSH key by default
-AESD_ASSIGNMENTS_SITE = https://github.com/cu-ecen-aeld/assignments-3-and-later-siddjove.git
+AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git#g
 AESD_ASSIGNMENTS_SITE_METHOD = git
 AESD_ASSIGNMENTS_LICENSE = GPL-2.0+
 AESD_ASSIGNMENTS_INSTALL_TARGET = YES
