@@ -4,6 +4,3 @@
 [submodule "assignment-autotest/Unity"]
 	path = assignment-autotest/Unity
 	url = https://github.com/ThrowTheSwitch/Unity.git
-[submodule "buildroot-assignments-base"]
-	path = buildroot-assignments-base
-	url = https://github.com/cu-ecen-aeld/buildroot-assignments-base.git
