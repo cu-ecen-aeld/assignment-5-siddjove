@@ -1,15 +1,4 @@
-- name: Configure SSH for cloning (write private key)
-  run: |
-    mkdir -p ~/.ssh
-    # write the secret to a file
-    printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
-    # ensure SSH uses only that identity and accept github host key
-    echo 'Host github.com' > ~/.ssh/config
-    echo '  HostName github.com' >> ~/.ssh/config
-    echo '  IdentityFile ~/.ssh/id_rsa' >> ~/.ssh/config
-    echo '  IdentitiesOnly yes' >> ~/.ssh/config
-    ssh-keyscan github.com >> ~/.ssh/known_hosts
+name: assignment-test
 
 on:
   push:
@@ -27,28 +16,53 @@ jobs:
     steps:
       - name: Checkout main repo
         uses: actions/checkout@v2
+        with:
+          # keep submodules disabled here; we'll update them explicitly below
+          fetch-depth: 0
 
-      - name: Start SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Start SSH agent and add private key
+        # use a recent ssh-agent action version
+        uses: webfactory/ssh-agent@v0.8.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Fix github.com host key
         run: |
           mkdir -p /root/.ssh
+          # remove any stale entry to avoid hostkey mismatch
           ssh-keygen -f "/root/.ssh/known_hosts" -R "github.com" || true
           ssh-keyscan github.com >> /root/.ssh/known_hosts
+          chmod 600 /root/.ssh/known_hosts
+
+      - name: Debug: verify SSH key & connectivity (safe check)
+        env:
+          # ensure git uses the agent identity; IdentitiesOnly not needed with agent
+          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+        run: |
+          echo "=== ls -la /root/.ssh ==="
+          ls -la /root/.ssh || true
+          echo
+          echo "=== ssh-agent has identities ==="
+          ssh-add -l || echo "No identities loaded into ssh-agent"
+          echo
+          echo "=== attempt git ls-remote (this tests SSH + deploy-key access) ==="
+          git ls-remote git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git HEAD || true
+          echo "=== debug step complete ==="
 
       - name: Checkout submodules
         run: git submodule update --init --recursive
 
       - name: Run full test
         env:
+          # keep behaviour consistent with original runner: disable strict host checking
           GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
         run: ./full-test.sh
 
       - name: Cleanup
         if: always()
         run: |
-          ssh-add -D
+          # clear ssh-agent identities
+          ssh-add -D || true
+          # (optional) remove known_hosts entry we added
+          ssh-keygen -f "/root/.ssh/known_hosts" -R "github.com" || true
 
