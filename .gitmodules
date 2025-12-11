@@ -6,7 +6,6 @@
 	url = https://github.com/ThrowTheSwitch/Unity.git
 [submodule "buildroot"]
 	path = buildroot
-	# use GitHub mirror (avoid GitLab auth issues)
 	url = https://github.com/buildroot/buildroot.git
 	branch = 2024.02.x
 [submodule "buildroot-assignments-base"]
