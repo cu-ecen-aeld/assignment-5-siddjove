@@ -1,28 +1,42 @@
 
 name: assignment-test
+
 on:
-    push:
-        tags-ignore:
-            - '*'
-        branches:
-            - '*'
+  push:
+    tags-ignore:
+      - '*'
+    branches:
+      - '*'
+
 jobs:
-    full-test:
-        container: cuaesd/aesd-autotest:24-assignment5-buildroot
-        runs-on: self-hosted
-        timeout-minutes: 120
-        steps:
-          - uses: actions/checkout@v2
-          - name: Checkout submodules
-            run: git submodule update --init --recursive
-          - uses: webfactory/ssh-agent@v0.5.3
-            with:
-                ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          - name: Run full test
-            env:
-              GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
-            run: ./full-test.sh
-          - name: Cleanup
-            if: always()
-            run: |
-              ssh-add -D
+  full-test:
+    runs-on: self-hosted
+    container: cuaesd/aesd-autotest:24-assignment5-buildroot
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v2
+
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Fix github.com host key
+        run: |
+          mkdir -p /root/.ssh
+          ssh-keygen -f "/root/.ssh/known_hosts" -R "github.com" || true
+          ssh-keyscan github.com >> /root/.ssh/known_hosts
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      - name: Run full test
+        env:
+          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+        run: ./full-test.sh
+
+      - name: Cleanup
+        if: always()
+        run: |
+          ssh-add -D   
