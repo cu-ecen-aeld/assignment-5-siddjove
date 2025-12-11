@@ -1,8 +1,16 @@
-name: assignment-test
+- name: Configure SSH for cloning (write private key)
+  run: |
+    mkdir -p ~/.ssh
+    # write the secret to a file
+    printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+    # ensure SSH uses only that identity and accept github host key
+    echo 'Host github.com' > ~/.ssh/config
+    echo '  HostName github.com' >> ~/.ssh/config
+    echo '  IdentityFile ~/.ssh/id_rsa' >> ~/.ssh/config
+    echo '  IdentitiesOnly yes' >> ~/.ssh/config
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
 
- uses: webfactory/ssh-agent@v0.8.1
-  with:
-    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 on:
   push:
     tags-ignore:
