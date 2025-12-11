@@ -1,62 +1,28 @@
+
 name: assignment-test
-
 on:
-  push:
-    tags-ignore:
-      - '*'
-    branches:
-      - '*'
-
+    push:
+        tags-ignore:
+            - '*'
+        branches:
+            - '*'
 jobs:
-  full-test:
-    runs-on: self-hosted
-    container: cuaesd/aesd-autotest:24-assignment5-buildroot
-    timeout-minutes: 120
-
-    steps:
-      - name: Checkout main repo (with submodules)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: recursive
-          persist-credentials: false
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Start SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Fix github.com host key
-        run: |
-          mkdir -p /root/.ssh
-          ssh-keygen -f "/root/.ssh/known_hosts" -R "github.com" || true
-          ssh-keyscan github.com >> /root/.ssh/known_hosts
-
-      - name: Debug: print .gitmodules that CI sees
-        run: |
-          echo "== root .gitmodules =="
-          if [ -f .gitmodules ]; then sed -n '1,200p' .gitmodules; else echo "(none)"; fi
-          for d in buildroot assignment-autotest buildroot-assignments-base; do
-            echo "== $d/.gitmodules =="
-            if [ -f "$d/.gitmodules" ]; then sed -n '1,200p' "$d/.gitmodules"; else echo "(none)"; fi
-          done
-
-      - name: (Temporary) Provide fallback URL for missing submodule entry
-        if: always()
-        run: |
-          git config --local submodule.buildroot-assignments-base.url git@github.com:cu-ecen-aeld/buildroot-assignments-base.git
-
-      - name: Checkout submodules (explicit sync & update)
-        run: |
-          git submodule sync --recursive
-          git submodule update --init --recursive --progress
-
-      - name: Run full test
-        env:
-          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
-        run: ./full-test.sh
-
-      - name: Cleanup
-        if: always()
-        run: ssh-add -D
+    full-test:
+        container: cuaesd/aesd-autotest:24-assignment5-buildroot
+        runs-on: self-hosted
+        timeout-minutes: 120
+        steps:
+          - uses: actions/checkout@v2
+          - name: Checkout submodules
+            run: git submodule update --init --recursive
+          - uses: webfactory/ssh-agent@v0.5.3
+            with:
+                ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          - name: Run full test
+            env:
+              GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+            run: ./full-test.sh
+          - name: Cleanup
+            if: always()
+            run: |
+              ssh-add -D
