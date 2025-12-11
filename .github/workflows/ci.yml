@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: cuaesd/aesd-autotest:24-assignment5-buildroot
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout (robust)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: (Optional) Start SSH agent for SSH clones
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Debug: show .gitmodules
+        run: |
+          echo "== .gitmodules ==" 
+          [ -f .gitmodules ] && sed -n '1,200p' .gitmodules || echo "(none)"
+
+      - name: Ensure submodules (no-op if none)
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --progress || true
+
+      - name: Run full test
+        env:
+          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+        run: |
+          echo "Placeholder for full-test.sh; replace with real test command"
