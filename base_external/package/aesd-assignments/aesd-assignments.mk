@@ -1,10 +1,17 @@
-# AESD assignment package for buildroot
-# Assignment repo commit referenced:
-AESD_ASSIGNMENTS_VERSION = 61d334296210877130c40c5a6d4153f1c27d1e58
-AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
+AESD_ASSIGNMENTS_SITE = https://github.com/cu-ecen-aeld/assignments-3-and-later-siddjove.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
-AESD_ASSIGNMENTS_GIT_SUBMODULES = YES
+AESD_ASSIGNMENTS_VERSION = master
 
-# We will vendor buildroot-assignments-base inside this repo to avoid submodule issues.
-AESD_ASSIGNMENTS_SUBMODULES = YES
-AESD_ASSIGNMENTS_SUBMODULES_URL = git@github.com:cu-ecen-aeld/buildroot-assignments-base.git
+define AESD_ASSIGNMENTS_BUILD_CMDS
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/server
+endef
+
+define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
+	$(INSTALL) -m 0755 $(@D)/server/aesdsocket \
+		$(TARGET_DIR)/usr/bin/aesdsocket
+	$(INSTALL) -m 0755 $(@D)/server/aesdsocket-start-stop \
+		$(TARGET_DIR)/etc/init.d/S99aesdsocket
+endef
+
+$(eval $(generic-package))
+
