@@ -1,6 +1,6 @@
 menu "External packages"
 
-source "package/aesd-assignments/Config.in"
+source "aesd-assignments/Config.in"
 
 endmenu
 
