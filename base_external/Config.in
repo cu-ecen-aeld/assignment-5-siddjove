@@ -1,5 +1,5 @@
 menu "Project base external options"
 
-source "$BR2_EXTERNAL_PROJECT_BASE_PATH/package/Config.in"
+source "package/Config.in"
 
 endmenu
