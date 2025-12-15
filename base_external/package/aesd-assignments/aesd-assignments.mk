@@ -7,8 +7,11 @@ define AESD_ASSIGNMENTS_BUILD_CMDS
 endef
 
 define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
+	$(INSTALL) -d $(TARGET_DIR)/usr/bin
 	$(INSTALL) -m 0755 $(@D)/server/aesdsocket \
 		$(TARGET_DIR)/usr/bin/aesdsocket
+
+	$(INSTALL) -d $(TARGET_DIR)/etc/init.d
 	$(INSTALL) -m 0755 $(@D)/server/aesdsocket-start-stop \
 		$(TARGET_DIR)/etc/init.d/S99aesdsocket
 endef
