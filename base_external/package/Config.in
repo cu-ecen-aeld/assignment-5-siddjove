@@ -1,7 +1,2 @@
-menu "External packages"
-
 source "aesd-assignments/Config.in"
-
-endmenu
-
 

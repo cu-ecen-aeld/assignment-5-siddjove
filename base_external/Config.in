@@ -1,5 +1,6 @@
-menu "Project base external options"
+menu "External packages"
 
 source "package/Config.in"
 
 endmenu
+
