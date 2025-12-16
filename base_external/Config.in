@@ -1,6 +1,6 @@
-menu "External packages"
+menu "Project base external options"
 
-source "package/Config.in"
+source "$BR2_EXTERNAL_PROJECT_BASE_PATH/package/Config.in"
 
 endmenu
 
