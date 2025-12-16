@@ -1,6 +1,6 @@
 AESD_ASSIGNMENTS_SITE = https://github.com/cu-ecen-aeld/assignments-3-and-later-siddjove.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
-AESD_ASSIGNMENTS_VERSION = main
+AESD_ASSIGNMENTS_VERSION = master
 
 define AESD_ASSIGNMENTS_BUILD_CMDS
 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/server
