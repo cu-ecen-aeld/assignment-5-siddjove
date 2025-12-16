@@ -1,2 +1,2 @@
-source "aesd_assignments/Config.in"
+source "$BR2_EXTERNAL_PROJECT_BASE_PATH/package/aesd_assignments/Config.in"
 
