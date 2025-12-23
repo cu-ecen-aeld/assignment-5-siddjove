@@ -1,6 +1,1 @@
-menu "Project base external options"
-
-source "$BR2_EXTERNAL_PROJECT_BASE_PATH/package/Config.in"
-
-endmenu
-
+source "$BR2_EXTERNAL_AESD_ASSIGN_PATH/package/aesd-assignments/Config.in"

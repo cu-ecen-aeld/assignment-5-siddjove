@@ -1,11 +1,16 @@
+
 ##############################################################
 #
-# AESD_ASSIGNMENTS
+# AESD-ASSIGNMENTS
 #
 ##############################################################
 
-AESD_ASSIGNMENTS_VERSION = e8c4805  
-AESD_ASSIGNMENTS_SITE = git@github.com:cu-ecen-aeld/assignments-3-and-later-siddjove.git
+#TODO: Fill up the contents below in order to reference your assignment 3 git contents
+AESD_ASSIGNMENTS_VERSION = a31d945 
+# Note: Be sure to reference the *ssh* repository URL here (not https) to work properly
+# with ssh keys and the automated build/test system.
+# Your site should start with git@github.com:
+AESD_ASSIGNMENTS_SITE = git@github.com:siddjove/assignments-3-and-later-siddjove2.git
 AESD_ASSIGNMENTS_SITE_METHOD = git
 AESD_ASSIGNMENTS_GIT_SUBMODULES = YES
 
