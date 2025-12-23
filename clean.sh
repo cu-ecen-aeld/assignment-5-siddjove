@@ -1,7 +1,7 @@
 #!/bin/sh
-# Clean Buildroot output for assignment 4
-set -e
+# buil6d root cleanup script
 
-# Go into buildroot directory and run distclean
-cd "$(dirname "$0")/buildroot"
+cd buildroot
 make distclean
+
+
